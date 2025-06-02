@@ -1,0 +1,137 @@
+{% extends 'symple/base.html' %}
+
+{% block title %}Portal de Ingressos - Início{% endblock %}
+
+{% block content %}
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Encontre os Melhores Eventos</h1>
+        <p class="lead mb-5">Compre ingressos para shows, festivais, teatro, esportes e muito mais!</p>
+        <div class="d-flex justify-content-center">
+            <form class="row g-3 col-md-8" action="{% url 'lista_eventos' %}" method="get">
+                <div class="col-md-8">
+                    <input type="text" name="busca" class="form-control form-control-lg" placeholder="Buscar eventos...">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-secondary btn-lg w-100">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% load static %}
+
+<section class="container mb-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="fw-bold">Eventos em Destaque</h2>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'lista_eventos' %}" class="btn btn-outline-primary">Ver todos os eventos</a>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for evento in eventos_destaque %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if "Fantasma da Ópera" in evento.nome %}
+                <img src="{% static 'img/fantasma_opera.jpg' %}" class="card-img-top" alt="{{ evento.nome }}">
+                {% elif "Festival de Música Rock" in evento.nome %}
+                <img src="{% static 'img/festival_rock.jpg' %}" class="card-img-top" alt="{{ evento.nome }}">
+                {% elif "Campeonato Brasileiro" in evento.nome %}
+                <img src="{% static 'img/final_campeonato.jpg' %}" class="card-img-top" alt="{{ evento.nome }}">
+                {% elif evento.imagem %}
+                <img src="{{ evento.imagem.url }}" class="card-img-top" alt="{{ evento.nome }}">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="card-img-top" alt="{{ evento.nome }}">
+                {% endif %}
+                <div class="card-body">
+                    <span class="badge-categoria mb-2">Evento</span>
+                    <h5 class="card-title">{{ evento.nome }}</h5>
+                    <p class="card-text">{{ evento.descricao|truncatechars:100 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="evento-data"><i class="far fa-calendar-alt me-1"></i> {{ evento.data|date:"d/m/Y" }}</span>
+                        <span class="evento-local"><i class="fas fa-map-marker-alt me-1"></i> {{ evento.local }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="evento-preco">A partir de R$ {{ evento.ingressos.all.0.preco }}</span>
+                        <a href="{% url 'detalhe_evento' evento.id %}" class="btn btn-primary">Ver detalhes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>Nenhum evento disponível no momento.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+<section class="bg-light py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <h2 class="fw-bold mb-4">Por que escolher o Portal de Ingressos?</h2>
+                <div class="d-flex mb-3">
+                    <div class="me-3">
+                        <i class="fas fa-check-circle text-primary fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>Segurança Garantida</h5>
+                        <p>Todas as transações são seguras e seus dados estão protegidos.</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-3">
+                    <div class="me-3">
+                        <i class="fas fa-bolt text-primary fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>Rapidez na Compra</h5>
+                        <p>Processo de compra simplificado e rápido, sem complicações.</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-3">
+                    <div class="me-3">
+                        <i class="fas fa-tag text-primary fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>Melhores Preços</h5>
+                        <p>Garantimos os melhores preços e promoções exclusivas.</p>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="fas fa-headset text-primary fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>Suporte 24/7</h5>
+                        <p>Atendimento ao cliente disponível 24 horas por dia, 7 dias por semana.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="img-fluid rounded shadow" alt="Público em evento">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-primary text-white py-5 mb-5">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">Inscreva-se para receber novidades</h2>
+        <p class="lead mb-4">Seja o primeiro a saber sobre novos eventos e promoções exclusivas.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="d-flex">
+                    <input type="email" class="form-control form-control-lg me-2" placeholder="Seu e-mail">
+                    <button type="submit" class="btn btn-secondary btn-lg">Inscrever</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

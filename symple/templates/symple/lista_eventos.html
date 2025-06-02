@@ -1,0 +1,126 @@
+{# symple/templates/symple/lista_eventos.html #}
+{% extends 'symple/base.html' %}
+{% load static %}
+
+{% block title %}Portal de Ingressos - Eventos{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="fw-bold">Eventos Disponíveis</h1>
+            <p class="lead">Confira nossa programação completa de eventos e garanta seu ingresso!</p>
+        </div>
+        <div class="col-md-4">
+            <form method="get" action=".">
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Buscar eventos..."
+                           name="busca"
+                           value="{{ request.GET.busca }}">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="btn-group" role="group" aria-label="Filtros de categoria">
+                <button type="button" class="btn btn-outline-primary active">Todos</button>
+                <button type="button" class="btn btn-outline-primary">Shows</button>
+                <button type="button" class="btn btn-outline-primary">Esportes</button>
+                <button type="button" class="btn btn-outline-primary">Teatro</button>
+                <button type="button" class="btn btn-outline-primary">Festivais</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for evento in eventos %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {# --- Bloco de imagem usando a mesma lógica do detalhe --- #}
+                {% if "Fantasma da Ópera" in evento.nome %}
+                    <img src="{% static 'img/fantasma_opera.jpg' %}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% elif "Festival de Música Rock" in evento.nome %}
+                    <img src="{% static 'img/festival_rock.jpg' %}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% elif "Campeonato Brasileiro" in evento.nome %}
+                    <img src="{% static 'img/final_campeonato.jpg' %}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% elif evento.imagem %}
+                    {# Se o modelo Evento tiver um ImageField chamado “imagem” #}
+                    <img src="{{ evento.imagem.url }}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% else %}
+                    {# Placeholder genérico caso nenhuma condição acima seja atendida #}
+                    <img src="{% static 'img/placeholder_evento.jpg' %}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% endif %}
+                {# ---------------------------------------------------------- #}
+
+                <div class="card-body">
+                    <span class="badge-categoria mb-2">Evento</span>
+                    <h5 class="card-title">{{ evento.nome }}</h5>
+                    <p class="card-text">
+                        {{ evento.descricao|truncatechars:100|default:"Sem descrição disponível." }}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="evento-data">
+                            <i class="far fa-calendar-alt me-1"></i> {{ evento.data|date:"d/m/Y" }}
+                        </span>
+                        <span class="evento-local">
+                            <i class="fas fa-map-marker-alt me-1"></i> {{ evento.local }}
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        {% with primeiro_ingresso=evento.ingressos.all.0 %}
+                            {% if primeiro_ingresso %}
+                                <span class="evento-preco">A partir de R$ {{ primeiro_ingresso.preco }}</span>
+                            {% else %}
+                                <span class="evento-preco">Consulte preços</span>
+                            {% endif %}
+                        {% endwith %}
+                        <a href="{% url 'detalhe_evento' evento.id %}" class="btn btn-primary">
+                            Ver detalhes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>Nenhum evento disponível no momento.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <nav aria-label="Paginação de eventos">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Próximo</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends 'symple/base.html' %}
+
+{% block title %}Checkout - Finalizar Compra{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow mb-4">
+                <div class="card-body p-4">
+                    <h2 class="fw-bold mb-4">Finalizar Compra</h2>
+                    
+                    <h5 class="mb-3">Resumo do Pedido</h5>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Evento</th>
+                                    <th>Seção</th>
+                                    <th>Data</th>
+                                    <th>Preço</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ingresso in compra.ingressos.all %}
+                                <tr>
+                                    <td>{{ ingresso.evento.nome }}</td>
+                                    <td>{{ ingresso.secao }}</td>
+                                    <td>{{ ingresso.evento.data|date:"d/m/Y" }}</td>
+                                    <td>R$ {{ ingresso.preco }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-end">Total:</th>
+                                    <th>R$ {{ compra.total }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Dados do Cliente</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Nome:</strong> {{ compra.cliente.nome }}</p>
+                            <p><strong>Email:</strong> {{ compra.cliente.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>CPF:</strong> {{ compra.cliente.cpf }}</p>
+                            <p><strong>Telefone:</strong> {{ compra.cliente.telefone }}</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Forma de Pagamento</h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="metodo_pagamento" id="cartao_credito" value="cartao_credito" checked>
+                                <label class="form-check-label" for="cartao_credito">
+                                    <i class="far fa-credit-card me-2"></i>Cartão de Crédito
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="metodo_pagamento" id="cartao_debito" value="cartao_debito">
+                                <label class="form-check-label" for="cartao_debito">
+                                    <i class="fas fa-credit-card me-2"></i>Cartão de Débito
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="metodo_pagamento" id="pix" value="pix">
+                                <label class="form-check-label" for="pix">
+                                    <i class="fas fa-qrcode me-2"></i>PIX
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="metodo_pagamento" id="boleto" value="boleto">
+                                <label class="form-check-label" for="boleto">
+                                    <i class="fas fa-barcode me-2"></i>Boleto Bancário
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="cartao_form" class="mb-4">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <label for="numero_cartao" class="form-label">Número do Cartão</label>
+                                    <input type="text" class="form-control" id="numero_cartao" placeholder="0000 0000 0000 0000">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="validade" class="form-label">Validade</label>
+                                    <input type="text" class="form-control" id="validade" placeholder="MM/AA">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" placeholder="123">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="nome_cartao" class="form-label">Nome no Cartão</label>
+                                    <input type="text" class="form-control" id="nome_cartao" placeholder="Nome como está no cartão">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Finalizar Pagamento</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Resumo da Compra</h4>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>R$ {{ compra.total }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Taxa de serviço:</span>
+                        <span>R$ 0,00</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold">Total:</span>
+                        <span class="fw-bold evento-preco">R$ {{ compra.total }}</span>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> Ao finalizar a compra, você concorda com os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>.
+                    </div>
+                    
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-lock text-success fa-2x"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Pagamento Seguro</h6>
+                            <p class="small text-muted mb-0">Seus dados estão protegidos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <img src="https://www.svgrepo.com/show/328132/visa.svg" alt="Visa" height="30" class="me-2">
+                        <img src="https://www.svgrepo.com/show/328121/mastercard.svg" alt="Mastercard" height="30" class="me-2">
+                        <img src="https://www.svgrepo.com/show/328143/american-express.svg" alt="American Express" height="30" class="me-2">
+                        <img src="https://www.svgrepo.com/show/328145/pix.svg" alt="Pix" height="30">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const metodoPagamento = document.querySelectorAll('input[name="metodo_pagamento"]');
+        const cartaoForm = document.getElementById('cartao_form');
+        
+        metodoPagamento.forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                if (this.value === 'cartao_credito' || this.value === 'cartao_debito') {
+                    cartaoForm.style.display = 'block';
+                } else {
+                    cartaoForm.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

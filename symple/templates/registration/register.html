@@ -1,0 +1,68 @@
+{% extends 'symple/base.html' %}
+
+{% block title %}Cadastro{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow">
+                <div class="card-body p-5">
+                    <h2 class="text-center fw-bold mb-4">Criar Conta</h2>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <p>{{ field.label }}: {{ error }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                            
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="form-floating mb-3">
+                            <input type="text" name="username" class="form-control" id="id_username" placeholder="Nome de usuário" required>
+                            <label for="id_username">Nome de usuário</label>
+                            <div class="form-text">Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_ apenas.</div>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input type="password" name="password1" class="form-control" id="id_password1" placeholder="Senha" required>
+                            <label for="id_password1">Senha</label>
+                            <div class="form-text">
+                                <ul>
+                                    <li>Sua senha não pode ser muito parecida com suas outras informações pessoais.</li>
+                                    <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
+                                    <li>Sua senha não pode ser uma senha comumente utilizada.</li>
+                                    <li>Sua senha não pode ser inteiramente numérica.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="form-floating mb-4">
+                            <input type="password" name="password2" class="form-control" id="id_password2" placeholder="Confirmação de senha" required>
+                            <label for="id_password2">Confirmação de senha</label>
+                            <div class="form-text">Digite a mesma senha, para verificação.</div>
+                        </div>
+                        
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p>Já tem uma conta? <a href="{% url 'login' %}">Entrar</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

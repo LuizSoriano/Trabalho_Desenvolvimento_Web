@@ -1,0 +1,138 @@
+{% extends 'symple/base.html' %}
+
+{% block title %}{{ evento.nome }} - Detalhes{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<section class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Início</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'lista_eventos' %}">Eventos</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ evento.nome }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4 border-0 shadow">
+                {# ------ Bloco de imagem com condicional por nome ------ #}
+                {% if "Fantasma da Ópera" in evento.nome %}
+                    <img src="{% static 'img/fantasma_opera.jpg' %}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% elif "Festival de Música Rock" in evento.nome %}
+                    <img src="{% static 'img/festival_rock.jpg' %}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% elif "Campeonato Brasileiro" in evento.nome %}
+                    <img src="{% static 'img/final_campeonato.jpg' %}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% elif evento.imagem %}
+                    {# Caso o objeto Evento tenha um campo ImageField/FileField chamado “imagem” #}
+                    <img src="{{ evento.imagem.url }}"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% else %}
+                    {# Placeholder genérico se não houver imagem personalizada nem nome especial #}
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=1170&amp;q=80"
+                         class="card-img-top"
+                         alt="{{ evento.nome }}">
+                {% endif %}
+                {# ----------------------------------------------------------- #}
+
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge-categoria">Evento</span>
+                        <span class="evento-data">
+                            <i class="far fa-calendar-alt me-1"></i>
+                            {{ evento.data|date:"d/m/Y" }}
+                        </span>
+                    </div>
+                    <h1 class="card-title fw-bold mb-3">{{ evento.nome }}</h1>
+                    <p class="card-text">{{ evento.descricao|default:"Sem descrição disponível." }}</p>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5 class="fw-bold">Detalhes do Evento</h5>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                                    <strong>Local:</strong> {{ evento.local }}
+                                </li>
+                                <li>
+                                    <i class="fas fa-users me-2 text-primary"></i>
+                                    <strong>Capacidade:</strong> {{ evento.capacidade }} pessoas
+                                </li>
+                                <li>
+                                    <i class="fas fa-ticket-alt me-2 text-primary"></i>
+                                    <strong>Ingressos disponíveis:</strong> {{ evento.ingressos_disponiveis }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 border-0 shadow">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Localização</h4>
+                    <div class="ratio ratio-16x9">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.1775626936844!2d-46.72226522374631!3d-23.600952178729806!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce56c31b1fe649%3A0x7f5579e222bce95d!2sEst%C3%A1dio%20Cicero%20Pompeu%20de%20Toledo%20-%20Morumbi!5e0!3m2!1spt-BR!2sbr!4v1684422547720!5m2!1spt-BR!2sbr"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow sticky-top" style="top: 100px;">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4">Ingressos Disponíveis</h4>
+                    
+                    {% for ingresso in ingressos %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ ingresso.secao }}</h5>
+                            <p class="evento-preco mb-3">R$ {{ ingresso.preco }}</p>
+                            <a href="{% url 'comprar_ingresso' ingresso.id %}" class="btn btn-primary w-100">
+                                Comprar
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="alert alert-warning">
+                        Não há ingressos disponíveis para este evento no momento.
+                    </div>
+                    {% endfor %}
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-lock text-success fa-2x"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Pagamento Seguro</h6>
+                            <p class="small text-muted mb-0">Seus dados estão protegidos</p>
+                        </div>
+                    </div>
+                    {% load static %}
+                    <div class="text-center">
+                        <img src="{% static 'img/pagamento/paypal.svg' %}" alt="PayPal" height="50" class="me-2">
+                        <img src="{% static 'img/pagamento/mastercard.svg' %}" alt="Mastercard" height="30" class="me-2">
+                        <img src="{% static 'img/pagamento/american_express.svg' %}" alt="American Express" height="30" class="me-2">
+                        <img src="{% static 'img/pagamento/pix.svg' %}" alt="Pix" height="30" class="me-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
