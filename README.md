@@ -8,18 +8,18 @@ Este é um sistema completo de venda de ingressos desenvolvido em Django, que pe
 
 ```
 sistema_ingressos/
-├── portal_ingressos/       # Configurações do projeto
+├── portal_vendas/       # Configurações do projeto
 │   ├── settings.py         # Configurações Django
 │   ├── urls.py             # URLs principais
 │   └── wsgi.py             # Configuração WSGI
-├── ingressos/              # Aplicação principal
+├── symple/              # Aplicação principal
 │   ├── models.py           # Modelos de dados
 │   ├── views.py            # Views principais
 │   ├── auth_views.py       # Views de autenticação
 │   ├── admin.py            # Configuração do admin
 │   ├── urls.py             # URLs da aplicação
 │   └── templates/          # Templates HTML
-│       ├── ingressos/      # Templates da aplicação
+│       ├── symple/      # Templates da aplicação
 │       └── registration/   # Templates de autenticação
 ├── static/                 # Arquivos estáticos
 ├── media/                  # Arquivos de mídia (uploads)
