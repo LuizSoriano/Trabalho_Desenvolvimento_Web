@@ -7,24 +7,47 @@ Este é um sistema completo de venda de ingressos desenvolvido em Django, que pe
 ## Estrutura do Projeto
 
 ```
-sistema_ingressos/
-├── portal_vendas/       # Configurações do projeto
-│   ├── settings.py         # Configurações Django
-│   ├── urls.py             # URLs principais
-│   └── wsgi.py             # Configuração WSGI
-├── symple/              # Aplicação principal
-│   ├── models.py           # Modelos de dados
-│   ├── views.py            # Views principais
-│   ├── auth_views.py       # Views de autenticação
-│   ├── admin.py            # Configuração do admin
-│   ├── urls.py             # URLs da aplicação
-│   └── templates/          # Templates HTML
-│       ├── symple/      # Templates da aplicação
-│       └── registration/   # Templates de autenticação
-├── static/                 # Arquivos estáticos
-├── media/                  # Arquivos de mídia (uploads)
-└── manage.py               # Script de gerenciamento Django
-```
+Sistema_Ingressos_Reestruturado/
+├── portal_vendas/                  # App Django principal
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── symple/                         # App de funcionalidades do sistema
+│   ├── migrations/
+│   ├── templates/
+│   │   └──registration/
+│   │       ├── login.html
+│   │       └── register.html
+│   │   └── symple/
+│   │       ├── base.html
+│   │       ├── home.html
+│   │       ├── lista_eventos.html
+│   │       └── detalhe_evento.html
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── views.py
+│   └── urls.py
+├── static/                         # Pasta “origem” de arquivos estáticos (versionada)
+│   ├── img/
+│   │   ├── fantasma_opera.jpg
+│   │   ├── festival_rock.jpg
+│   │   ├── final_campeonato.jpg
+│   │   ├── placeholder_evento.jpg
+│   │   └── pagamento/
+│           ├── visa.svg
+│           ├── mastercard.svg
+│           ├── american_express.svg
+│           └── pix.svg
+├── venv/                           # Ambiente virtual (não versionado)
+├── db.sqlite3                      # Banco SQLite (não versionado)
+├── criar_usuarios.py
+├── manage.py
+└── .gitignore
+
 
 ## Modelos de Dados
 
