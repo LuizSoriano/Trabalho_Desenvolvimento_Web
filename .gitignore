@@ -1,3 +1,4 @@
 __pycache__
-exemplos.json
-admin
+staticfiles/
+venv/
+db.sqlite3
