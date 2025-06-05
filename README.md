@@ -7,7 +7,7 @@ Este é um sistema completo de venda de ingressos desenvolvido em Django, que pe
 ## Estrutura do Projeto
 
 ```
-Sistema_Ingressos_Reestruturado/
+Trabalho_Desenvolvimento_Web/
 ├── portal_vendas/                  # App Django principal
 │   ├── __init__.py
 │   ├── settings.py
@@ -31,7 +31,7 @@ Sistema_Ingressos_Reestruturado/
 │   ├── models.py
 │   ├── views.py
 │   └── urls.py
-├── static/                         # Pasta “origem” de arquivos estáticos (versionada)
+├── static/                         # Pasta “origem” de arquivos estáticos
 │   ├── img/
 │   │   ├── fantasma_opera.jpg
 │   │   ├── festival_rock.jpg
@@ -42,12 +42,11 @@ Sistema_Ingressos_Reestruturado/
 │           ├── mastercard.svg
 │           ├── american_express.svg
 │           └── pix.svg
-├── venv/                           # Ambiente virtual (não versionado)
-├── db.sqlite3                      # Banco SQLite (não versionado)
 ├── criar_usuarios.py
 ├── manage.py
-└── .gitignore
+└── .gitignore                      # Arquivo de configuração do Git para ignorar arquivos e pastas
 
+```
 
 ## Modelos de Dados
 
