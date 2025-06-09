@@ -104,7 +104,6 @@ O sistema utiliza os seguintes modelos:
 1. Clone o repositório:
 ```
 git clone <url-do-repositorio>
-cd sistema_ingressos
 ```
 
 2. Crie e ative um ambiente virtual:
